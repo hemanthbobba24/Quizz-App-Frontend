@@ -1,0 +1,586 @@
+import React, { useState } from 'react';
+import {
+  Box,
+  Container,
+  Paper,
+  Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Avatar,
+  Chip,
+  AppBar,
+  Toolbar,
+  IconButton,
+  Button,
+  TextField,
+  InputAdornment,
+  Menu,
+  MenuItem,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Grid,
+  Card,
+  CardContent,
+  Tabs,
+  Tab,
+  Select,
+  FormControl,
+  InputLabel,
+} from '@mui/material';
+import {
+  ArrowBack,
+  Search,
+  MoreVert,
+  Add,
+  Edit,
+  Delete,
+  Block,
+  CheckCircle,
+  Person,
+  AdminPanelSettings,
+  Group,
+  SupervisorAccount,
+} from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
+
+const UserManagement = () => {
+  const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState('');
+  const [tabValue, setTabValue] = useState(0);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [dialogType, setDialogType] = useState('');
+  const [editFormData, setEditFormData] = useState({
+    username: '',
+    email: '',
+    role: '',
+  });
+
+  const users = [
+    {
+      id: 1,
+      username: 'admin',
+      email: 'admin@example.com',
+      role: 'Admin',
+      status: 'Active',
+      quizzesTaken: 4,
+      score: 1800,
+      joinedDate: '2024-10-26',
+      lastActive: '2025-11-12',
+    },
+    {
+      id: 2,
+      username: 'code_master',
+      email: 'codemaster@example.com',
+      role: 'User',
+      status: 'Active',
+      quizzesTaken: 12,
+      score: 2400,
+      joinedDate: '2024-09-15',
+      lastActive: '2025-11-11',
+    },
+    {
+      id: 3,
+      username: 'quiz_whiz',
+      email: 'quizwhiz@example.com',
+      role: 'User',
+      status: 'Active',
+      quizzesTaken: 10,
+      score: 2150,
+      joinedDate: '2024-10-01',
+      lastActive: '2025-11-10',
+    },
+    {
+      id: 4,
+      username: 'react_guru',
+      email: 'reactguru@example.com',
+      role: 'Moderator',
+      status: 'Active',
+      quizzesTaken: 8,
+      score: 1650,
+      joinedDate: '2024-08-20',
+      lastActive: '2025-11-09',
+    },
+    {
+      id: 5,
+      username: 'inactive_user',
+      email: 'inactive@example.com',
+      role: 'User',
+      status: 'Suspended',
+      quizzesTaken: 2,
+      score: 400,
+      joinedDate: '2024-07-10',
+      lastActive: '2024-12-15',
+    },
+  ];
+
+  const stats = [
+    {
+      title: 'Total Users',
+      value: users.length,
+      icon: <Group />,
+      color: '#6366f1',
+    },
+    {
+      title: 'Active Users',
+      value: users.filter((u) => u.status === 'Active').length,
+      icon: <CheckCircle />,
+      color: '#10b981',
+    },
+    {
+      title: 'Admins',
+      value: users.filter((u) => u.role === 'Admin').length,
+      icon: <AdminPanelSettings />,
+      color: '#ec4899',
+    },
+    {
+      title: 'Moderators',
+      value: users.filter((u) => u.role === 'Moderator').length,
+      icon: <SupervisorAccount />,
+      color: '#f59e0b',
+    },
+  ];
+
+  const handleMenuOpen = (event, user) => {
+    setAnchorEl(event.currentTarget);
+    setSelectedUser(user);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+    setSelectedUser(null);
+  };
+
+  const handleDialogOpen = (type) => {
+    setDialogType(type);
+    if (type === 'edit' && selectedUser) {
+      setEditFormData({
+        username: selectedUser.username,
+        email: selectedUser.email,
+        role: selectedUser.role,
+      });
+    }
+    setOpenDialog(true);
+    handleMenuClose();
+  };
+
+  const handleDialogClose = () => {
+    setOpenDialog(false);
+    setDialogType('');
+    setEditFormData({ username: '', email: '', role: '' });
+  };
+
+  const handleEditChange = (e) => {
+    const { name, value } = e.target;
+    setEditFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const getRoleColor = (role) => {
+    switch (role) {
+      case 'Admin':
+        return 'error';
+      case 'Moderator':
+        return 'warning';
+      default:
+        return 'default';
+    }
+  };
+
+  const getStatusColor = (status) => {
+    return status === 'Active' ? 'success' : 'error';
+  };
+
+  const filteredUsers = users.filter(
+    (user) =>
+      user.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const getFilteredByTab = () => {
+    if (tabValue === 1) return filteredUsers.filter((u) => u.status === 'Active');
+    if (tabValue === 2) return filteredUsers.filter((u) => u.status === 'Suspended');
+    return filteredUsers;
+  };
+
+  return (
+    <Box sx={{ minHeight: '100vh', bgcolor: 'background.default' }}>
+      {/* AppBar */}
+      <AppBar position="static" elevation={0}>
+        <Toolbar>
+          <IconButton
+            edge="start"
+            color="inherit"
+            onClick={() => navigate('/dashboard')}
+          >
+            <ArrowBack />
+          </IconButton>
+          <Typography variant="h6" sx={{ flexGrow: 1 }}>
+            User Management
+          </Typography>
+          <Button
+            variant="contained"
+            startIcon={<Add />}
+            sx={{
+              bgcolor: 'white',
+              color: 'primary.main',
+              '&:hover': { bgcolor: 'grey.100' },
+            }}
+            onClick={() => handleDialogOpen('add')}
+          >
+            Add User
+          </Button>
+        </Toolbar>
+      </AppBar>
+
+      <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+        {/* Stats Cards */}
+        <Grid container spacing={3} sx={{ mb: 4 }}>
+          {stats.map((stat, index) => (
+            <Grid item xs={12} sm={6} md={3} key={index}>
+              <Card
+                sx={{
+                  background: `linear-gradient(135deg, ${stat.color}15 0%, ${stat.color}05 100%)`,
+                  border: `1px solid ${stat.color}30`,
+                }}
+              >
+                <CardContent>
+                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                    <Avatar
+                      sx={{
+                        bgcolor: stat.color,
+                        width: 40,
+                        height: 40,
+                        mr: 2,
+                      }}
+                    >
+                      {stat.icon}
+                    </Avatar>
+                  </Box>
+                  <Typography variant="h4" sx={{ fontWeight: 700, color: stat.color }}>
+                    {stat.value}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {stat.title}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+
+        {/* Main User Table */}
+        <Paper sx={{ p: 3 }}>
+          {/* Header with Search */}
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              mb: 3,
+              flexWrap: 'wrap',
+              gap: 2,
+            }}
+          >
+            <Typography variant="h5" sx={{ fontWeight: 600 }}>
+              All Users
+            </Typography>
+            <TextField
+              size="small"
+              placeholder="Search users..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Search />
+                  </InputAdornment>
+                ),
+              }}
+              sx={{ minWidth: 250 }}
+            />
+          </Box>
+
+          {/* Tabs */}
+          <Tabs
+            value={tabValue}
+            onChange={(e, newValue) => setTabValue(newValue)}
+            sx={{ mb: 3 }}
+          >
+            <Tab label="All Users" />
+            <Tab label="Active" />
+            <Tab label="Suspended" />
+          </Tabs>
+
+          {/* Users Table */}
+          <TableContainer>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell sx={{ fontWeight: 600 }}>User</TableCell>
+                  <TableCell sx={{ fontWeight: 600 }}>Email</TableCell>
+                  <TableCell align="center" sx={{ fontWeight: 600 }}>
+                    Role
+                  </TableCell>
+                  <TableCell align="center" sx={{ fontWeight: 600 }}>
+                    Status
+                  </TableCell>
+                  <TableCell align="center" sx={{ fontWeight: 600 }}>
+                    Quizzes
+                  </TableCell>
+                  <TableCell align="center" sx={{ fontWeight: 600 }}>
+                    Score
+                  </TableCell>
+                  <TableCell align="center" sx={{ fontWeight: 600 }}>
+                    Last Active
+                  </TableCell>
+                  <TableCell align="center" sx={{ fontWeight: 600 }}>
+                    Actions
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {getFilteredByTab().map((user) => (
+                  <TableRow
+                    key={user.id}
+                    sx={{
+                      '&:hover': { bgcolor: 'action.hover' },
+                    }}
+                  >
+                    <TableCell>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                        <Avatar
+                          sx={{
+                            bgcolor:
+                              user.role === 'Admin'
+                                ? 'error.main'
+                                : user.role === 'Moderator'
+                                ? 'warning.main'
+                                : 'primary.main',
+                          }}
+                        >
+                          {user.username.charAt(0).toUpperCase()}
+                        </Avatar>
+                        <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                          {user.username}
+                        </Typography>
+                      </Box>
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant="body2" color="text.secondary">
+                        {user.email}
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Chip
+                        label={user.role}
+                        size="small"
+                        color={getRoleColor(user.role)}
+                        icon={
+                          user.role === 'Admin' ? (
+                            <AdminPanelSettings sx={{ fontSize: 16 }} />
+                          ) : user.role === 'Moderator' ? (
+                            <SupervisorAccount sx={{ fontSize: 16 }} />
+                          ) : (
+                            <Person sx={{ fontSize: 16 }} />
+                          )
+                        }
+                      />
+                    </TableCell>
+                    <TableCell align="center">
+                      <Chip
+                        label={user.status}
+                        size="small"
+                        color={getStatusColor(user.status)}
+                      />
+                    </TableCell>
+                    <TableCell align="center">
+                      <Typography variant="body2">{user.quizzesTaken}</Typography>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                        {user.score.toLocaleString()}
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Typography variant="body2" color="text.secondary">
+                        {user.lastActive}
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="center">
+                      <IconButton
+                        size="small"
+                        onClick={(e) => handleMenuOpen(e, user)}
+                      >
+                        <MoreVert />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+
+          {/* No Results */}
+          {getFilteredByTab().length === 0 && (
+            <Box sx={{ textAlign: 'center', py: 4 }}>
+              <Typography color="text.secondary">No users found</Typography>
+            </Box>
+          )}
+        </Paper>
+      </Container>
+
+      {/* Context Menu */}
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleMenuClose}
+      >
+        <MenuItem onClick={() => handleDialogOpen('edit')}>
+          <Edit sx={{ mr: 1, fontSize: 20 }} /> Edit User
+        </MenuItem>
+        <MenuItem onClick={() => handleDialogOpen('suspend')}>
+          <Block sx={{ mr: 1, fontSize: 20 }} />{' '}
+          {selectedUser?.status === 'Active' ? 'Suspend' : 'Activate'}
+        </MenuItem>
+        <MenuItem onClick={() => handleDialogOpen('delete')}>
+          <Delete sx={{ mr: 1, fontSize: 20 }} color="error" /> Delete User
+        </MenuItem>
+      </Menu>
+
+      {/* Edit/Add User Dialog */}
+      <Dialog open={openDialog && dialogType === 'edit'} onClose={handleDialogClose} maxWidth="sm" fullWidth>
+        <DialogTitle>Edit User</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            label="Username"
+            name="username"
+            fullWidth
+            value={editFormData.username}
+            onChange={handleEditChange}
+            sx={{ mb: 2, mt: 1 }}
+          />
+          <TextField
+            margin="dense"
+            label="Email"
+            name="email"
+            type="email"
+            fullWidth
+            value={editFormData.email}
+            onChange={handleEditChange}
+            sx={{ mb: 2 }}
+          />
+          <FormControl fullWidth>
+            <InputLabel>Role</InputLabel>
+            <Select
+              name="role"
+              value={editFormData.role}
+              onChange={handleEditChange}
+              label="Role"
+            >
+              <MenuItem value="User">User</MenuItem>
+              <MenuItem value="Moderator">Moderator</MenuItem>
+              <MenuItem value="Admin">Admin</MenuItem>
+            </Select>
+          </FormControl>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDialogClose}>Cancel</Button>
+          <Button variant="contained" onClick={handleDialogClose}>
+            Save Changes
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Add User Dialog */}
+      <Dialog open={openDialog && dialogType === 'add'} onClose={handleDialogClose} maxWidth="sm" fullWidth>
+        <DialogTitle>Add New User</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            label="Username"
+            fullWidth
+            sx={{ mb: 2, mt: 1 }}
+          />
+          <TextField
+            margin="dense"
+            label="Email"
+            type="email"
+            fullWidth
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            margin="dense"
+            label="Password"
+            type="password"
+            fullWidth
+            sx={{ mb: 2 }}
+          />
+          <FormControl fullWidth>
+            <InputLabel>Role</InputLabel>
+            <Select label="Role" defaultValue="User">
+              <MenuItem value="User">User</MenuItem>
+              <MenuItem value="Moderator">Moderator</MenuItem>
+              <MenuItem value="Admin">Admin</MenuItem>
+            </Select>
+          </FormControl>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDialogClose}>Cancel</Button>
+          <Button variant="contained" onClick={handleDialogClose}>
+            Add User
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={openDialog && dialogType === 'delete'} onClose={handleDialogClose}>
+        <DialogTitle>Delete User</DialogTitle>
+        <DialogContent>
+          <Typography>
+            Are you sure you want to delete user "{selectedUser?.username}"? This action cannot be undone.
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDialogClose}>Cancel</Button>
+          <Button variant="contained" color="error" onClick={handleDialogClose}>
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Suspend/Activate Dialog */}
+      <Dialog open={openDialog && dialogType === 'suspend'} onClose={handleDialogClose}>
+        <DialogTitle>
+          {selectedUser?.status === 'Active' ? 'Suspend' : 'Activate'} User
+        </DialogTitle>
+        <DialogContent>
+          <Typography>
+            Are you sure you want to {selectedUser?.status === 'Active' ? 'suspend' : 'activate'} user "{selectedUser?.username}"?
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDialogClose}>Cancel</Button>
+          <Button
+            variant="contained"
+            color={selectedUser?.status === 'Active' ? 'warning' : 'success'}
+            onClick={handleDialogClose}
+          >
+            {selectedUser?.status === 'Active' ? 'Suspend' : 'Activate'}
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </Box>
+  );
+};
+
+export default UserManagement;
