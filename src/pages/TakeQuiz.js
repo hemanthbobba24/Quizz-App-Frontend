@@ -463,11 +463,14 @@ const TakeQuiz = () => {
             borderRadius: 0,
             py: 2,
             px: 3,
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            color: 'white',
+            boxShadow: '0 4px 20px rgba(102, 126, 234, 0.3)',
           }}
         >
           <Container maxWidth="lg">
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-              <Typography variant="h6" sx={{ fontWeight: 600 }}>
+              <Typography variant="h6" sx={{ fontWeight: 700 }}>
                 {quiz.title}
               </Typography>
 
@@ -476,23 +479,30 @@ const TakeQuiz = () => {
                 <Chip
                   icon={<TimerIcon />}
                   label={formatTime(timeRemaining)}
-                  color={timeRemaining < 300 ? 'error' : 'primary'}
-                  sx={{ fontWeight: 600, fontSize: '1rem', px: 1 }}
+                  color={timeRemaining < 300 ? 'error' : 'default'}
+                  sx={{ 
+                    fontWeight: 600, 
+                    fontSize: '1rem', 
+                    px: 1,
+                    bgcolor: 'rgba(255,255,255,0.2)',
+                    color: 'white',
+                    '& .MuiChip-icon': { color: 'white' }
+                  }}
                 />
 
                 {/* Progress */}
                 <Box>
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography variant="body2" sx={{ opacity: 0.95 }}>
                     Question {currentQuestionIndex + 1} of {quiz.totalQuestions}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography variant="body2" sx={{ opacity: 0.95 }}>
                     Answered: {answeredCount}/{quiz.totalQuestions}
                   </Typography>
                 </Box>
 
                 {/* Exit button */}
                 <Tooltip title="Exit Quiz">
-                  <IconButton onClick={() => setShowExitDialog(true)} color="error">
+                  <IconButton onClick={() => setShowExitDialog(true)} sx={{ color: 'white' }}>
                     <ExitIcon />
                   </IconButton>
                 </Tooltip>

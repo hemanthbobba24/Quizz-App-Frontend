@@ -34,7 +34,13 @@ const QuizManagement = () => {
 
   return (
     <Box sx={{ minHeight: '100vh', bgcolor: 'background.default' }}>
-      <AppBar position="static">
+      <AppBar 
+        position="static"
+        sx={{
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          boxShadow: '0 4px 20px rgba(102, 126, 234, 0.3)',
+        }}
+      >
         <Toolbar>
           <IconButton
             edge="start"
@@ -43,7 +49,7 @@ const QuizManagement = () => {
           >
             <ArrowBack />
           </IconButton>
-          <Typography variant="h6" sx={{ flexGrow: 1 }}>
+          <Typography variant="h6" sx={{ flexGrow: 1, fontWeight: 700 }}>
             Quiz Management
           </Typography>
         </Toolbar>

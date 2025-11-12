@@ -84,7 +84,7 @@ const Footer = () => {
                 WebkitTextFillColor: 'transparent',
               }}
             >
-              QuizApp
+              TriviaVerse
             </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
               Challenge yourself, compete with others, and enhance your knowledge
@@ -230,7 +230,7 @@ const Footer = () => {
           }}
         >
           <Typography variant="body2" color="text.secondary">
-            © {currentYear} QuizApp. All rights reserved.
+            © {currentYear} TriviaVerse. All rights reserved.
           </Typography>
           <Stack
             direction="row"

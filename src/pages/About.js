@@ -45,7 +45,14 @@ const About = () => {
 
   return (
     <Box sx={{ minHeight: '100vh', bgcolor: 'background.default', display: 'flex', flexDirection: 'column' }}>
-      <AppBar position="static" elevation={0}>
+      <AppBar 
+        position="static" 
+        elevation={0}
+        sx={{
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          boxShadow: '0 4px 20px rgba(102, 126, 234, 0.3)',
+        }}
+      >
         <Toolbar>
           <IconButton
             edge="start"
@@ -54,7 +61,7 @@ const About = () => {
           >
             <ArrowBack />
           </IconButton>
-          <Typography variant="h6" sx={{ flexGrow: 1 }}>
+          <Typography variant="h6" sx={{ flexGrow: 1, fontWeight: 700 }}>
             About Us
           </Typography>
         </Toolbar>
