@@ -211,7 +211,7 @@ const TakeQuiz = () => {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [quizStarted, quizSubmitted]);
+  }, [quizStarted, quizSubmitted, handleAutoSubmit, showTimeWarning]);
 
   // Format time as MM:SS
   const formatTime = (seconds) => {
@@ -274,10 +274,10 @@ const TakeQuiz = () => {
     calculateResults();
   };
 
-  const handleAutoSubmit = () => {
+  const handleAutoSubmit = useCallback(() => {
     setQuizSubmitted(true);
     calculateResults();
-  };
+  }, [quiz]);
 
   // Calculate results
   const calculateResults = () => {
