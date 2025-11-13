@@ -37,7 +37,7 @@ import {
   EmojiEvents,
   Schedule,
 } from '@mui/icons-material';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Footer from '../components/Footer';
 
 const Dashboard = () => {

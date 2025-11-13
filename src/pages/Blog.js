@@ -15,15 +15,11 @@ import {
 import {
   Article as ArticleIcon,
   TrendingUp as TrendingIcon,
-  CalendarToday as CalendarIcon,
   Person as PersonIcon,
 } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
 import Footer from '../components/Footer';
 
 const Blog = () => {
-  const navigate = useNavigate();
-
   // Sample blog posts - you can update these later
   const blogPosts = [
     {
