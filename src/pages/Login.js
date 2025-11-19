@@ -116,13 +116,24 @@ const Login = () => {
     setLoading(true);
 
     try {
-       await dispatch(loginUser({
+      const result = await dispatch(loginUser({
         email: formData.email,
         password: formData.password,
-      })).unwrap();
+      })).unwrap();;
+      console.log("res == ", result.data?.role)
+      
       setAlertMessage({ type: 'success', text: 'Login successful! Redirecting...' });
-      const from = location.state?.from?.pathname || '/profile';
-      navigate(from, { replace: true });
+      
+      // Redirect based on user role or previous location
+      const userRole = result?.data?.role || "user";
+      const from = location.state?.from?.pathname;
+      
+      let redirectPath = '/dashboard'; // Default to dashboard
+      if (from && from !== '/login' && from !== '/register') {
+        redirectPath = from; // Use previous location if available
+      }
+      
+      navigate(redirectPath, { replace: true });
     } catch (error) {
       console.error('Login error:', error);
       let errorMessage = 'Invalid email or password';

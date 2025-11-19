@@ -17,8 +17,6 @@ import {
   Chip,
   LinearProgress,
   Divider,
-  ToggleButtonGroup,
-  ToggleButton,
   Paper,
 } from '@mui/material';
 import {
@@ -38,18 +36,28 @@ import {
   Schedule,
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { logoutUser } from '../store/slices/authSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { logoutUser, fetchUserProfile } from '../store/slices/authSlice';
 import Footer from '../components/Footer';
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const authUser = useSelector((state) => state.auth.user);
   const [anchorEl, setAnchorEl] = useState(null);
   
-  // Mock user role - In production, this would come from authentication context
-  // Options: 'user', 'creator', 'admin'
-  const [userRole, setUserRole] = useState('admin'); // Change this to test different views
+  console.log("authUser ", authUser)
+  // Get user role from Redux state
+  // API returns: { data: { role, username, email, _id, ... } }
+  // After login, authUser directly contains the user object with role property
+  const userRole = authUser?.role || authUser?.data?.role || 'user';
+
+  React.useEffect(() => {
+    // Fetch user profile if not already loaded
+    if (!authUser) {
+      dispatch(fetchUserProfile());
+    }
+  }, [dispatch, authUser]);
 
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -193,7 +201,9 @@ const Dashboard = () => {
             color="inherit"
             onClick={handleMenuOpen}
           >
-            <Avatar sx={{ width: 32, height: 32, bgcolor: 'secondary.main' }}>A</Avatar>
+            <Avatar sx={{ width: 32, height: 32, bgcolor: 'secondary.main' }}>
+              {authUser?.username?.charAt(0)?.toUpperCase() || 'U'}
+            </Avatar>
           </IconButton>
           <Menu
             anchorEl={anchorEl}
@@ -225,31 +235,6 @@ const Dashboard = () => {
       </AppBar>
 
       <Container maxWidth="lg" sx={{ mt: 4, mb: 4, flex: 1 }}>
-        {/* Demo Role Switcher - Remove in production */}
-        <Paper sx={{ p: 2, mb: 3, bgcolor: 'info.lighter', border: '1px solid', borderColor: 'info.light' }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 2 }}>
-            <Typography variant="body2" color="info.dark">
-              <strong>Demo Mode:</strong> Switch between different user roles to see different dashboard views
-            </Typography>
-            <ToggleButtonGroup
-              value={userRole}
-              exclusive
-              onChange={(e, newRole) => newRole && setUserRole(newRole)}
-              size="small"
-            >
-              <ToggleButton value="user" color="primary">
-                User
-              </ToggleButton>
-              <ToggleButton value="creator" color="warning">
-                Creator
-              </ToggleButton>
-              <ToggleButton value="admin" color="error">
-                Admin
-              </ToggleButton>
-            </ToggleButtonGroup>
-          </Box>
-        </Paper>
-
         <Typography variant="h4" sx={{ mb: 1, fontWeight: 600 }}>
           {getWelcomeMessage()}
         </Typography>
