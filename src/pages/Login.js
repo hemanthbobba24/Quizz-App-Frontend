@@ -116,7 +116,7 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const result = await dispatch(loginUser({
+       await dispatch(loginUser({
         email: formData.email,
         password: formData.password,
       })).unwrap();

@@ -141,6 +141,22 @@ const Register = () => {
     }
   };
 
+  if (loading || authLoading) {
+      return (
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
+          <CircularProgress />
+        </Box>
+      );
+    }
+
+  if(authError){
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
+        <Alert severity="error">{authError}</Alert>
+      </Box>
+    );
+  }
+
   return (
     <Box
       sx={{
