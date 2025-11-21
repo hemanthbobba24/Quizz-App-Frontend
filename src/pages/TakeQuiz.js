@@ -33,7 +33,6 @@ import {
 } from '@mui/icons-material';
 import { useParams, useNavigate } from 'react-router-dom';
 import Footer from '../components/Footer';
-import quizService from '../services/quizService';
 
 const TakeQuiz = () => {
   const { quizId } = useParams();

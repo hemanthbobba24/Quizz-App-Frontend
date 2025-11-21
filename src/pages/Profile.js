@@ -82,7 +82,7 @@ const Profile = () => {
   }
 
   return (
-    <Box sx={{ minHeight: '100vh', bgcolor: 'background.default' }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', bgcolor: 'background.default' }}>
       <AppBar 
         position="static"
         sx={{
@@ -104,7 +104,7 @@ const Profile = () => {
         </Toolbar>
       </AppBar>
 
-      <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
+      <Container maxWidth="md" sx={{ mt: 4, mb: 4, flex: 1 }}>
         {error && (
           <Alert severity="warning" sx={{ mb: 2 }}>
             {error}
