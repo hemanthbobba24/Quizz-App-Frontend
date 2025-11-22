@@ -175,15 +175,6 @@ const Dashboard = () => {
         }}
       >
         <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1, fontWeight: 700 }} onClick={()=> navigate("/")}>
             TriviaVerse
           </Typography>
@@ -539,7 +530,7 @@ const Dashboard = () => {
                         variant="contained"
                         onClick={() => navigate('/quiz/1')}
                       >
-                        Start Quiz 2
+                        Start Quiz
                       </Button>
                       <Button size="small">View Details</Button>
                     </CardActions>
