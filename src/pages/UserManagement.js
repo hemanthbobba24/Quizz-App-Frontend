@@ -73,6 +73,9 @@ const UserManagement = () => {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
 
+
+
+
    useEffect(() => {
       let isMounted = true;
   
@@ -238,9 +241,14 @@ const UserManagement = () => {
   const getFilteredByTab = () => {
     if (tabValue === 1) return filteredUsers.filter((u) => u.isActive === true);
     if (tabValue === 2) return filteredUsers.filter((u) => (u.isActive === false || u.isActive === 'N/A'));
+
+    console.log(filteredUsers);
+    
     return filteredUsers;
   };
 
+  
+  
     if (loading) {
       return (
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
@@ -256,6 +264,48 @@ const UserManagement = () => {
       </Box>
     )
   }
+
+const statusChecker = (user) => {
+  // Always highest priority
+  if (user.isOnline) {
+    return { color: "success", label: "Online" };
+  }
+
+  const lastActive = user.lastActive;
+
+  if (!lastActive) {
+    return { color: "default", label: "Offline" };
+  }
+
+  // CASE 1: lastActive is a valid timestamp
+  const parsedDate = new Date(lastActive);
+  if (!isNaN(parsedDate.getTime())) {
+    const now = new Date();
+    const diffHours = (now - parsedDate) / (1000 * 60 * 60);
+
+    if (diffHours <= 24) {
+      return { color: "warning", label: "Active Recently" };
+    }
+
+    return { color: "default", label: "Offline" };
+  }
+
+  // CASE 2: lastActive is a string like "5 min ago", "2 hours ago"
+  const text = lastActive.toLowerCase();
+
+  if (
+    text.includes("min") ||
+    text.includes("hour") ||
+    text.includes("1 day")
+  ) {
+    return { color: "warning", label: "Active Recently" };
+  }
+
+  return { color: "default", label: "Offline" };
+};
+
+
+
   return (
     <Box sx={{ minHeight: '100vh', bgcolor: 'background.default' }}>
       {/* AppBar */}
@@ -433,6 +483,7 @@ const UserManagement = () => {
                       </Typography>
                     </TableCell>
                     <TableCell align="center">
+                    
                       <Chip
                         label={user.role}
                         size="small"
@@ -466,7 +517,20 @@ const UserManagement = () => {
                     </TableCell>
                     <TableCell align="center">
                       <Typography variant="body2" color="text.secondary">
-                        {user.lastActive}
+
+                        <TableCell align="center">
+                          {(() => {
+                            const status = statusChecker(user);
+                            return (
+                              <Chip
+                                label={status?.label}
+                                size="small"
+                                color={status?.color}
+                              />
+                            );
+                          })()}
+                        </TableCell>
+
                       </Typography>
                     </TableCell>
                     <TableCell align="center">
