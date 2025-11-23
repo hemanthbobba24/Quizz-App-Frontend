@@ -86,8 +86,7 @@ const ChannelDetails = () => {
     setLoading(true);
     try {
       const response = await quizService.getAllQuizzes(channelId);
-      console.log('Questions response:', response);
-      
+
       // Handle different response structures
       const questionsData = response?.data
       const channelData = response.channel || response.data?.channel;
@@ -107,7 +106,7 @@ const ChannelDetails = () => {
     setUsersLoading(true);
     try {
       const response = await channelService.getChannelUsers(channelId);
-      console.log('Users response:', response);
+
       
       const usersData = response.users || response.data?.users || response.data || [];
       setUsers(Array.isArray(usersData) ? usersData : []);
