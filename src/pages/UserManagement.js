@@ -52,7 +52,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import Footer from '../components/Footer';
 import { userService } from '../services';
-import { getRoleColor, getStatusColor } from '../utils/helpers';
+import { getRoleColor, getStatusColor,getActiveColor } from '../utils/helpers';
 
 const UserManagement = () => {
   const navigate = useNavigate();
@@ -238,9 +238,14 @@ const UserManagement = () => {
   const getFilteredByTab = () => {
     if (tabValue === 1) return filteredUsers.filter((u) => u.isActive === true);
     if (tabValue === 2) return filteredUsers.filter((u) => (u.isActive === false || u.isActive === 'N/A'));
+
+    console.log(filteredUsers);
+    
     return filteredUsers;
   };
 
+  
+  
     if (loading) {
       return (
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
@@ -256,6 +261,9 @@ const UserManagement = () => {
       </Box>
     )
   }
+
+
+
   return (
     <Box sx={{ minHeight: '100vh', bgcolor: 'background.default' }}>
       {/* AppBar */}
@@ -433,6 +441,7 @@ const UserManagement = () => {
                       </Typography>
                     </TableCell>
                     <TableCell align="center">
+                    
                       <Chip
                         label={user.role}
                         size="small"
@@ -466,7 +475,15 @@ const UserManagement = () => {
                     </TableCell>
                     <TableCell align="center">
                       <Typography variant="body2" color="text.secondary">
-                        {user.lastActive}
+
+                          <TableCell align="center">
+                          <Chip
+                            label={user.lastActive}
+                            size="small"
+                            color={getActiveColor(user.lastActive)}
+                          />
+                          </TableCell>
+
                       </Typography>
                     </TableCell>
                     <TableCell align="center">

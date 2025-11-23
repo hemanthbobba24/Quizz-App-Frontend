@@ -70,7 +70,7 @@ function App() {
               <Route path="/quiz-results" element={<ProtectedRoute><QuizResults /></ProtectedRoute>} />
               <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
               <Route path="/leaderboard" element={<ProtectedRoute><Leaderboard /></ProtectedRoute>} />
-              <Route path="/user-management" element={<ProtectedRoute><UserManagement /></ProtectedRoute>} />
+              <Route path="/user-management" element={<ProtectedRoute><UserManagement /></ProtectedRoute> } />
               
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
