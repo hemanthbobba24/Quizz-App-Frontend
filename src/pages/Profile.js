@@ -5,18 +5,18 @@ import {
   Paper,
   Typography,
   Avatar,
-  Divider,
-  List,
-  ListItem,
-  ListItemText,
   Button,
   AppBar,
   Toolbar,
   IconButton,
   CircularProgress,
   Alert,
+  Card,
+  CardContent,
+  Grid,
+  Chip,
 } from '@mui/material';
-import { ArrowBack, Edit } from '@mui/icons-material';
+import { ArrowBack, Edit, Email as EmailIcon, CalendarMonth, EmojiEvents, Quiz } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUserProfile } from '../store/slices/authSlice';
@@ -106,67 +106,200 @@ const Profile = () => {
 
       <Container maxWidth="md" sx={{ mt: 4, mb: 4, flex: 1 }}>
         {error && (
-          <Alert severity="warning" sx={{ mb: 2 }}>
+          <Alert severity="warning" sx={{ mb: 3 }}>
             {error}
           </Alert>
         )}
-        <Paper sx={{ p: 4 }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+        
+        {/* Profile Header Card */}
+        <Paper 
+          elevation={3}
+          sx={{ 
+            p: 4, 
+            mb: 3,
+            borderRadius: 3,
+            background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%)',
+          }}
+        >
+          <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, alignItems: 'center', gap: 3 }}>
             <Avatar
               src={displayUser?.avatar}
               sx={{
-                width: 100,
-                height: 100,
+                width: 120,
+                height: 120,
                 bgcolor: 'primary.main',
-                fontSize: '2.5rem',
-                mr: 3,
+                fontSize: '3rem',
+                fontWeight: 700,
+                boxShadow: '0 8px 24px rgba(99, 102, 241, 0.3)',
+                border: '4px solid white',
               }}
             >
               {displayUser?.username?.charAt(0)?.toUpperCase() || 'U'}
             </Avatar>
-            <Box sx={{ flex: 1 }}>
-              <Typography variant="h4" gutterBottom>
+            
+            <Box sx={{ flex: 1, textAlign: { xs: 'center', sm: 'left' } }}>
+              <Typography variant="h4" sx={{ fontWeight: 700, mb: 1 }}>
                 {displayUser?.username || 'User'}
               </Typography>
-              <Typography variant="body1" color="text.secondary">
-                {displayUser?.email || 'No email'}
-              </Typography>
-              <Divider sx={{ mt: 1 }} />
-              <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: 'block' }}>
-                {displayUser?.roles?.[0].toUpperCase() || displayUser?.role?.toUpperCase()  || 'User'}
-              </Typography>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1, justifyContent: { xs: 'center', sm: 'flex-start' } }}>
+                <EmailIcon sx={{ fontSize: 18, color: 'text.secondary' }} />
+                <Typography variant="body1" color="text.secondary">
+                  {displayUser?.email || 'No email'}
+                </Typography>
+              </Box>
+              <Chip 
+                label={displayUser?.roles?.[0]?.toUpperCase() || displayUser?.role?.toUpperCase() || 'USER'}
+                size="small"
+                sx={{ 
+                  fontWeight: 600,
+                  bgcolor: 'primary.main',
+                  color: 'white',
+                  mt: 1,
+                }}
+              />
             </Box>
-            <Button variant="outlined" startIcon={<Edit />}>
+            
+            <Button 
+              variant="contained" 
+              startIcon={<Edit />}
+              sx={{
+                background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+                px: 3,
+                py: 1.5,
+                '&:hover': {
+                  background: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)',
+                  transform: 'translateY(-2px)',
+                  boxShadow: '0 8px 20px rgba(99, 102, 241, 0.4)',
+                },
+                transition: 'all 0.2s',
+              }}
+            >
               Edit Profile
             </Button>
           </Box>
-
-          <Divider sx={{ my: 3 }} />
-
-          <Typography variant="h6" gutterBottom>
-            Statistics
-          </Typography>
-          <List>
-            <ListItem>
-              <ListItemText
-                primary="Total Quizzes Taken"
-                secondary={displayUser?.quizzesTaken || 0}
-              />
-            </ListItem>
-            <ListItem>
-              <ListItemText
-                primary="Highest Score"
-                secondary={displayUser?.highestScore ? `${displayUser.highestScore} pts` : 'N/A'}
-              />
-            </ListItem>
-            <ListItem>
-              <ListItemText 
-                primary="Joined" 
-                secondary={profile?.timestamp ? new Date(profile?.timestamp).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : 'N/A'} 
-              />
-            </ListItem>
-          </List>
         </Paper>
+
+        {/* Statistics Section */}
+        <Typography variant="h5" sx={{ fontWeight: 700, mb: 3 }}>
+          Statistics
+        </Typography>
+        
+        <Grid container spacing={3}>
+          <Grid item xs={12} sm={4}>
+            <Card 
+              elevation={2}
+              sx={{ 
+                height: '100%',
+                borderRadius: 3,
+                transition: 'all 0.3s',
+                '&:hover': {
+                  transform: 'translateY(-4px)',
+                  boxShadow: '0 12px 24px rgba(0,0,0,0.1)',
+                }
+              }}
+            >
+              <CardContent sx={{ textAlign: 'center', py: 4 }}>
+                <Box
+                  sx={{
+                    width: 64,
+                    height: 64,
+                    borderRadius: '50%',
+                    bgcolor: 'rgba(99, 102, 241, 0.1)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    margin: '0 auto 16px',
+                  }}
+                >
+                  <Quiz sx={{ fontSize: 32, color: 'primary.main' }} />
+                </Box>
+                <Typography variant="h4" sx={{ fontWeight: 700, mb: 1, color: 'primary.main' }}>
+                  {displayUser?.quizzesTaken || 0}
+                </Typography>
+                <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>
+                  Total Quizzes Taken
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+
+          <Grid item xs={12} sm={4}>
+            <Card 
+              elevation={2}
+              sx={{ 
+                height: '100%',
+                borderRadius: 3,
+                transition: 'all 0.3s',
+                '&:hover': {
+                  transform: 'translateY(-4px)',
+                  boxShadow: '0 12px 24px rgba(0,0,0,0.1)',
+                }
+              }}
+            >
+              <CardContent sx={{ textAlign: 'center', py: 4 }}>
+                <Box
+                  sx={{
+                    width: 64,
+                    height: 64,
+                    borderRadius: '50%',
+                    bgcolor: 'rgba(16, 185, 129, 0.1)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    margin: '0 auto 16px',
+                  }}
+                >
+                  <EmojiEvents sx={{ fontSize: 32, color: 'success.main' }} />
+                </Box>
+                <Typography variant="h4" sx={{ fontWeight: 700, mb: 1, color: 'success.main' }}>
+                  {displayUser?.highestScore || 'N/A'}
+                </Typography>
+                <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>
+                  Highest Score
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+
+          <Grid item xs={12} sm={4}>
+            <Card 
+              elevation={2}
+              sx={{ 
+                height: '100%',
+                borderRadius: 3,
+                transition: 'all 0.3s',
+                '&:hover': {
+                  transform: 'translateY(-4px)',
+                  boxShadow: '0 12px 24px rgba(0,0,0,0.1)',
+                }
+              }}
+            >
+              <CardContent sx={{ textAlign: 'center', py: 4 }}>
+                <Box
+                  sx={{
+                    width: 64,
+                    height: 64,
+                    borderRadius: '50%',
+                    bgcolor: 'rgba(236, 72, 153, 0.1)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    margin: '0 auto 16px',
+                  }}
+                >
+                  <CalendarMonth sx={{ fontSize: 32, color: 'secondary.main' }} />
+                </Box>
+
+                <Typography variant="body1" sx={{ fontWeight: 700, mb: 1, color: 'secondary.main' }}>
+                  {profile?.timestamp || profile?.data?.createdAt ? new Date(profile?.timestamp || profile?.data?.createdAt).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : 'N/A'}
+                </Typography>
+                <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 500 }}>
+                  Member Since
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+        </Grid>
       </Container>
       <Footer />
     </Box>

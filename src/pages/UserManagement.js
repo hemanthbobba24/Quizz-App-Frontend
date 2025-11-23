@@ -238,8 +238,6 @@ const UserManagement = () => {
   const getFilteredByTab = () => {
     if (tabValue === 1) return filteredUsers.filter((u) => u.isActive === true);
     if (tabValue === 2) return filteredUsers.filter((u) => (u.isActive === false || u.isActive === 'N/A'));
-
-    console.log(filteredUsers);
     
     return filteredUsers;
   };

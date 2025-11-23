@@ -12,10 +12,8 @@ const quizService = {
    * @returns {Promise} List of quizzes
    */
   getAllQuizzes: async (channelId) => {
-    console.log("CHANNEL ID IN SERVICE:", channelId);
     try {
       const response = await apiClient.get(`/quiz/channel/${channelId}/questions`);
-      console.log("RESPONSE DATA:", response.data);
       return response.data;
     } catch (error) {
       throw error.response?.data || error.message;

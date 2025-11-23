@@ -133,8 +133,6 @@ const QuizManagement = () => {
       // Upload to API
       const response = await channelService.addBulkQuestions(selectedQuiz._id, questions);
       
-      console.log('Bulk upload response:', response);
-      
       // Update the local channel state with new question count
       const addedCount = response?.data.length || questions.length;
       
