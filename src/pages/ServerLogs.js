@@ -65,10 +65,12 @@ const ServerLogs = () => {
     if (userRole?.toLowerCase() !== 'admin') {
       navigate('/dashboard');
     }
+     // eslint-disable-next-line
   }, [authUser, navigate]);
 
   useEffect(() => {
     fetchLogs();
+  // eslint-disable-next-line
   }, [currentTab, currentPage, pageSize]);
 
   const fetchLogs = async () => {
