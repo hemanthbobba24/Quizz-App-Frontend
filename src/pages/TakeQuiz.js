@@ -496,7 +496,7 @@ const TakeQuiz = () => {
                   px: 4,
                 }}
               >
-                {fetchingQuestions ? 'Loading Questions...' : 'Start Quiz 1'}
+                {fetchingQuestions ? 'Loading Questions...' : 'Start Quiz'}
               </Button>
             </Box>
           </Paper>
