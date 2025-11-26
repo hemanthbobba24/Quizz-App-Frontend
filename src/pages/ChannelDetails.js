@@ -29,12 +29,6 @@ import {
   Tab,
   Avatar,
   ListItemAvatar,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
 } from '@mui/material';
 import {
   ArrowBack,
@@ -48,7 +42,6 @@ import {
   AutoAwesome,
   ContentCopy,
   EmojiEvents,
-  TrendingUp,
 } from '@mui/icons-material';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';

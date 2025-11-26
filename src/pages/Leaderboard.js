@@ -20,8 +20,6 @@ import {
   Grid,
   TextField,
   InputAdornment,
-  Tabs,
-  Tab,
   MenuItem,
   Select,
   FormControl,
@@ -105,89 +103,6 @@ const Leaderboard = () => {
     fetchLeaderboard();
   }, [selectedChannel]);
 
-  // const leaderboardData = [
-  //   {
-  //     rank: 1,
-  //     username: 'code_master',
-  //     avatar: 'C',
-  //     score: 2400,
-  //     quizzesTaken: 12,
-  //     accuracy: 95,
-  //     badge: 'gold',
-  //     trend: 'up',
-  //   },
-  //   {
-  //     rank: 2,
-  //     username: 'quiz_whiz',
-  //     avatar: 'Q',
-  //     score: 2150,
-  //     quizzesTaken: 10,
-  //     accuracy: 92,
-  //     badge: 'gold',
-  //     trend: 'up',
-  //   },
-  //   {
-  //     rank: 3,
-  //     username: 'admin',
-  //     avatar: 'A',
-  //     score: 1800,
-  //     quizzesTaken: 4,
-  //     accuracy: 90,
-  //     badge: 'silver',
-  //     trend: 'same',
-  //   },
-  //   {
-  //     rank: 4,
-  //     username: 'react_guru',
-  //     avatar: 'R',
-  //     score: 1650,
-  //     quizzesTaken: 8,
-  //     accuracy: 88,
-  //     badge: 'silver',
-  //     trend: 'up',
-  //   },
-  //   {
-  //     rank: 5,
-  //     username: 'trivia_fan',
-  //     avatar: 'T',
-  //     score: 1500,
-  //     quizzesTaken: 7,
-  //     accuracy: 85,
-  //     badge: 'silver',
-  //     trend: 'down',
-  //   },
-  //   {
-  //     rank: 6,
-  //     username: 'js_ninja',
-  //     avatar: 'J',
-  //     score: 1350,
-  //     quizzesTaken: 6,
-  //     accuracy: 82,
-  //     badge: 'bronze',
-  //     trend: 'up',
-  //   },
-  //   {
-  //     rank: 7,
-  //     username: 'css_wizard',
-  //     avatar: 'C',
-  //     score: 1200,
-  //     quizzesTaken: 5,
-  //     accuracy: 80,
-  //     badge: 'bronze',
-  //     trend: 'up',
-  //   },
-  //   {
-  //     rank: 8,
-  //     username: 'python_pro',
-  //     avatar: 'P',
-  //     score: 1100,
-  //     quizzesTaken: 5,
-  //     accuracy: 78,
-  //     badge: 'bronze',
-  //     trend: 'same',
-  //   },
-  // ];
-
   const topStats = [
     {
       title: 'Total Players',
@@ -215,18 +130,18 @@ const Leaderboard = () => {
     },
   ];
 
-  const getBadgeColor = (badge) => {
-    switch (badge) {
-      case 'gold':
-        return '#FFD700';
-      case 'silver':
-        return '#C0C0C0';
-      case 'bronze':
-        return '#CD7F32';
-      default:
-        return '#gray';
-    }
-  };
+  // const getBadgeColor = (badge) => {
+  //   switch (badge) {
+  //     case 'gold':
+  //       return '#FFD700';
+  //     case 'silver':
+  //       return '#C0C0C0';
+  //     case 'bronze':
+  //       return '#CD7F32';
+  //     default:
+  //       return '#gray';
+  //   }
+  // };
 
   const getRankColor = (rank) => {
     if (rank === 1) return '#FFD700';
