@@ -2,12 +2,14 @@
 User-agent: *
 Allow: /
 
-# Disallow admin pages
-Disallow: /dashboard/admin
+# Disallow protected user pages
+Disallow: /profile
 Disallow: /quiz-management
+Disallow: /user-management
+Disallow: /server-logs
 
 # Sitemap
 Sitemap: https://triviaverse.site/sitemap.xml
 
-# Crawl-delay
-Crawl-delay: 10
+# Crawl-delay (reduced for better indexing)
+Crawl-delay: 1
