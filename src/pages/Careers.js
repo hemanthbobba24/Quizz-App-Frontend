@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Container,
   Box,
@@ -23,9 +23,12 @@ import {
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import Footer from '../components/Footer';
+import ExternalRedirectModal from '../components/ExternalRedirectModal';
 
 const Careers = () => {
   const navigate = useNavigate();
+  const [modalOpen, setModalOpen] = useState(false);
+  const [pendingUrl, setPendingUrl] = useState('');
 
   const benefits = [
     'Competitive salary and equity',
@@ -40,22 +43,10 @@ const Careers = () => {
 
   const samplePositions = [
     {
-      title: 'Senior Full Stack Developer',
+      title: 'Open Source Contributor(Full Stack)',
       location: 'Remote',
       type: 'Full-time',
       department: 'Engineering',
-    },
-    {
-      title: 'Product Designer',
-      location: 'Hybrid',
-      type: 'Full-time',
-      department: 'Design',
-    },
-    {
-      title: 'Marketing Manager',
-      location: 'Remote',
-      type: 'Full-time',
-      department: 'Marketing',
     },
   ];
 
@@ -190,7 +181,13 @@ const Careers = () => {
                       <Chip label={position.department} size="small" variant="outlined" />
                     </Box>
                   </Box>
-                  <Button variant="contained" disabled>
+                  <Button
+                    variant="contained"
+                    onClick={() => {
+                      setPendingUrl('https://github.com/sd8917/Quizz-App-Frontend');
+                      setModalOpen(true);
+                    }}
+                  >
                     Apply
                   </Button>
                 </CardContent>
@@ -198,6 +195,8 @@ const Careers = () => {
             </Grid>
           ))}
         </Grid>
+
+        <ExternalRedirectModal open={modalOpen} onClose={() => setModalOpen(false)} url={pendingUrl} />
 
         {/* CTA */}
         <Box sx={{ textAlign: 'center' }}>
