@@ -1,4 +1,7 @@
 # Quizz App Frontend
+<p align="center">
+  <img src="public/assets/landing.png" alt="TriviaVerse Hero" width="900" />
+</p>
 
 A modern, responsive Quiz application built with React and Material-UI featuring custom theming and optimizations.
 

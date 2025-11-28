@@ -367,7 +367,7 @@ const Login = () => {
               </Box>
 
               {/* Demo Credentials */}
-              <Box
+              {/* <Box
                 sx={{
                   mt: 3,
                   p: 2,
@@ -385,7 +385,7 @@ const Login = () => {
                 <Typography variant="caption" sx={{ color: '#0369a1' }}>
                   Password: admin123
                 </Typography>
-              </Box>
+              </Box> */}
             </Paper>
           </Grid>
 

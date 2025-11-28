@@ -26,28 +26,12 @@ const OurTeam = () => {
   // Sample team members - you can update these later
   const teamMembers = [
     {
-      name: 'John Doe',
-      role: 'Founder & CEO',
-      image: 'https://i.pravatar.cc/150?img=10',
-      bio: 'Passionate about revolutionizing online learning',
-    },
-    {
-      name: 'Jane Smith',
-      role: 'CTO',
-      image: 'https://i.pravatar.cc/150?img=5',
-      bio: 'Tech enthusiast building scalable platforms',
-    },
-    {
-      name: 'Mike Johnson',
+      name: 'Sudhanshu Kumar ',
       role: 'Head of Product',
       image: 'https://i.pravatar.cc/150?img=12',
-      bio: 'Creating delightful user experiences',
-    },
-    {
-      name: 'Sarah Williams',
-      role: 'Lead Designer',
-      image: 'https://i.pravatar.cc/150?img=9',
-      bio: 'Crafting beautiful and intuitive designs',
+      bio: 'Passionate about revolutionizing online learning',
+      linkedin: 'https://www.linkedin.com/in/sudhanshu-site/',
+      github: 'https://github.com/sd8917/'
     },
   ];
 
@@ -68,7 +52,7 @@ const OurTeam = () => {
               Our Team
             </Typography>
             <Typography variant="h5" sx={{ opacity: 0.9, maxWidth: 600, mx: 'auto' }}>
-              Meet the passionate people behind QuizApp
+              Meet the passionate people behind TriviaVerse who are dedicated to making learning fun and engaging.
             </Typography>
           </Box>
         </Container>
@@ -138,8 +122,8 @@ const OurTeam = () => {
                     {member.bio}
                   </Typography>
                   <Box sx={{ display: 'flex', gap: 1, justifyContent: 'center' }}>
-                    <LinkedInIcon sx={{ color: 'text.secondary', fontSize: 20, cursor: 'pointer' }} />
-                    <TwitterIcon sx={{ color: 'text.secondary', fontSize: 20, cursor: 'pointer' }} />
+                    <LinkedInIcon sx={{ color: 'text.secondary', fontSize: 20, cursor: 'pointer' }}  onClick={() => window.open(member.linkedin, '_blank')} />
+                    <TwitterIcon sx={{ color: 'text.secondary', fontSize: 20, cursor: 'pointer' }}  onClick={() => window.open(member.github, '_blank')} />
                     <EmailIcon sx={{ color: 'text.secondary', fontSize: 20, cursor: 'pointer' }} />
                   </Box>
                 </CardContent>

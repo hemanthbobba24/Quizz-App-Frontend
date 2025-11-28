@@ -364,12 +364,12 @@ const LandingPage = () => {
                           index === 1 ? '1516321318423-f06f85e504b3' :
                           index === 2 ? '1434030216411-0b793f4b4173' :
                           index === 3 ? '1460925895917-afdab827c52f' :
-                          '1551434678-7d9d27d15f8e'
-                        }?w=500&h=400&fit=crop`}
+                          '1762427354251-f008b64dbc32'
+                        }?w=400&h=200&fit=crop`}
                         alt={step.title}
                         loading="lazy"
-                        width="500"
-                        height="400"
+                        width="400"
+                        height="220"
                         style={{
                           width: '100%',
                           maxWidth: 400,
