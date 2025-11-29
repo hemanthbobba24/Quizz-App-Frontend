@@ -75,7 +75,7 @@ const HelpCenter = () => {
     },
     {
       question: 'How do I create my own quiz?',
-      answer: 'After logging in,Please drop a email to update your role to "Creator" then navigate to the Dashboard and click on "Create Quiz". Follow the step-by-step wizard to add questions, set time limits, and publish your quiz. More details will be available in the Tutorial footer menu!',
+      answer: 'After logging in, please drop an email to update your role to "Creator" then navigate to the Dashboard and click on "Create Quiz". Follow the step-by-step wizard to add questions, set time limits, and publish your quiz. More details will be available in the Tutorial footer menu!',
     },
     {
       question: 'Can I track my progress?',
