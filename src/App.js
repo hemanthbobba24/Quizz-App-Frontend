@@ -73,7 +73,7 @@ function App() {
               <Route path="/cookie-policy" element={<CookiePolicy />} />
               <Route path="/disclaimer" element={<Suspense fallback={<div>Loading...</div>}><Disclaimer /></Suspense>} />
               <Route path="/tutorial" element={<Suspense fallback={<div>Loading...</div>}><Tutorial /></Suspense>} />
-              <Route path="/feedback" element={<Feedback />} />
+              <Route path="/feedback" element={<Suspense fallback={<div>Loading...</div>}><Feedback /></Suspense>} />
               
               {/* Protected Routes */}
               <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
