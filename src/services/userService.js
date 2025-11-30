@@ -61,6 +61,19 @@ const userService = {
   },
 
   /**
+   * Get admin dashboard statistics
+   * @returns {Promise} Admin statistics
+   */
+  getAdminStats: async () => {
+    try {
+      const response = await apiClient.get('/profile/admin/stats');
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  /**
    * Get all users (Admin only)
    * @param {Object} params - Query parameters
    * @returns {Promise} List of users

@@ -41,12 +41,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logoutUser, fetchUserProfile } from '../store/slices/authSlice';
 import Footer from '../components/Footer';
 import useFetch from '../hooks/useFetch';
+import { userService } from '../services';
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const authUser = useSelector((state) => state.auth.user);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [adminStats, setAdminStats] = useState(null);
+  const [statsLoading, setStatsLoading] = useState(false);
+  const [statsError, setStatsError] = useState(null);
   
   // Get user role from Redux state
   const userRole = authUser?.data?.roles?.[0] || authUser?.role || 'user';
@@ -103,15 +107,27 @@ const Dashboard = () => {
     { title: 'Active Users', value: '156', color: '#f59e0b', icon: <People /> },
   ];
 
-  const adminStats = [
-    { title: 'Total Users', value: '1,247', color: '#6366f1', icon: <People /> },
-    { title: 'Total Quizzes', value: '156', color: '#10b981', icon: <QuizIcon /> },
-    { title: 'Active Today', value: '342', color: '#ec4899', icon: <DashboardIcon /> },
-    { title: 'Completion Rate', value: '87%', color: '#f59e0b', icon: <Assessment /> },
-  ];
+  // Palette for channel cards (used when channel.color not provided)
+  const channelColors = ['#6366f1', '#10b981', '#ec4899', '#f59e0b', '#06b6d4', '#8b5cf6'];
+
+  // Compute admin stat cards from fetched adminStats state
+  const adminStatsCards = adminStats
+    ? [
+        { title: 'Total Users', value: (adminStats.totalUsers ?? 'N/A').toString(), color: '#6366f1', icon: <People /> },
+        { title: 'Total Channels', value: (adminStats.totalChannels  ?? '0').toString(), color: '#10b981', icon: <DashboardIcon /> },
+        { title: 'Total Quizzes', value: (adminStats.totalQuizzes ?? '0').toString(), color: '#10b981', icon: <QuizIcon /> },
+        { title: 'Active Today', value: (adminStats.activeToday ?? 'N/A').toString(), color: '#ec4899', icon: <TrendingUp /> },
+        { title: 'Completion Rate', value: typeof adminStats.completionRate === 'number' ? `${adminStats.completionRate}%` : (adminStats.completionRate ?? 'N/A'), color: '#f59e0b', icon: <Assessment /> },
+      ]
+    : [
+        { title: 'Total Users', value: '-', color: '#6366f1', icon: <People /> },
+        { title: 'Total Quizzes', value: '-', color: '#10b981', icon: <QuizIcon /> },
+        { title: 'Active Today', value: '-', color: '#ec4899', icon: <TrendingUp /> },
+        { title: 'Completion Rate', value: '-', color: '#f59e0b', icon: <Assessment /> },
+      ];
 
   // Select stats based on role
-  const stats = userRole === 'admin' ? adminStats : userRole === 'creator' ? creatorStats : userStats;
+  const stats = userRole === 'admin' ? adminStatsCards : userRole === 'creator' ? creatorStats : userStats;
 
   // Dummy data for non-user roles
   const dummyQuizzes = [
@@ -179,7 +195,40 @@ const Dashboard = () => {
     return 'primary';
   };
 
+   const fetchAdminStats = async () => {
+    setStatsLoading(true);
+    try {
+      const data = await userService.getAdminStats();
+      console.log("setAdminStats data =", data);
+      setAdminStats(data?.data);
+      setStatsError(null);
+    } catch (err) {
+      console.error('Error fetching admin stats:', err);
+      setStatsError(err.message || 'Failed to load admin stats');
+    } finally {
+      setStatsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (userRole === 'admin') {
+      fetchAdminStats();
+    }
+  }, [userRole]);
+
+  if(statsLoading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
+
   return (
+    <>
+     {statsError && <Box sx={{ mt: 1, mx: 2 }}>
+       <Alert severity="error">{statsError}</Alert>
+     </Box> }
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <AppBar 
         position="static" 
@@ -294,45 +343,67 @@ const Dashboard = () => {
             <Grid container spacing={3}>
               {quizzes?.map((channel, index) => (
                 <Grid item xs={12} md={6} key={channel._id || index}>
-                  <Card sx={{ height: '100%' }}>
-                    <CardContent>
-                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', mb: 2 }}>
-                        <Typography variant="h6" gutterBottom>
-                          {channel.name || channel.title || 'Untitled Channel'}
-                        </Typography>
-                        <Chip label={channel.category || 'General'} size="small" variant="outlined" />
-                      </Box>
-                      <Box sx={{ display: 'flex', gap: 1, mb: 2, flexWrap: 'wrap' }}>
-                        <Chip label={`${channel.questionCount || 0} Questions`} size="small" icon={<QuizIcon />} />
-                        <Chip
-                          label={channel.difficulty || 'Medium'}
-                          size="small"
-                          color={
-                            channel.difficulty === 'Easy'
-                              ? 'success'
-                              : channel.difficulty === 'Medium'
-                              ? 'warning'
-                              : 'error'
-                          }
-                        />
-                        {channel.timeLimit && <Chip label={channel.timeLimit} size="small" icon={<Schedule />} />}
-                      </Box>
-                      <Typography variant="body2" color="text.secondary">
-                        {channel.description || 'Test your knowledge and compete for the top spot on the leaderboard!'}
-                      </Typography>
-                    </CardContent>
-                    <CardActions>
-                      <Button 
-                        size="small" 
-                        variant="contained" 
-                        startIcon={<PlayArrow />}
-                        onClick={() => navigate(`/quiz/${channel._id}`)}
+                  {(() => {
+                    const color = channel.color || channelColors[index % channelColors.length];
+                    return (
+                      <Card
+                        sx={{
+                          height: '100%',
+                          background: `linear-gradient(135deg, ${color}15 0%, ${color}05 100%)`,
+                          border: `1px solid ${color}30`,
+                        }}
                       >
-                        Start Quiz
-                      </Button>
-                      <Button size="small" onClick={() => navigate(`/quiz/${channel._id}`)}>View Details</Button>
-                    </CardActions>
-                  </Card>
+                        <CardContent>
+                          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', mb: 2 }}>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                              <Avatar sx={{ bgcolor: color, width: 44, height: 44 }}>
+                                <QuizIcon />
+                              </Avatar>
+                              <Box>
+                                <Typography variant="h6" gutterBottom>
+                                  {channel.name || channel.title || 'Untitled Channel'}
+                                </Typography>
+                                <Typography variant="caption" color="text.secondary">
+                                  {channel.category || 'General'}
+                                </Typography>
+                              </Box>
+                            </Box>
+                            <Chip label={channel.category || 'General'} size="small" variant="outlined" />
+                          </Box>
+
+                          <Box sx={{ display: 'flex', gap: 1, mb: 2, flexWrap: 'wrap' }}>
+                            <Chip label={`${channel.questionCount || 0} Questions`} size="small" icon={<QuizIcon />} />
+                            <Chip
+                              label={channel.difficulty || 'Medium'}
+                              size="small"
+                              color={
+                                channel.difficulty === 'Easy'
+                                  ? 'success'
+                                  : channel.difficulty === 'Medium'
+                                  ? 'warning'
+                                  : 'error'
+                              }
+                            />
+                            {channel.timeLimit && <Chip label={channel.timeLimit} size="small" icon={<Schedule />} />}
+                          </Box>
+                          <Typography variant="body2" color="text.secondary">
+                            {channel.description || 'Test your knowledge and compete for the top spot on the leaderboard!'}
+                          </Typography>
+                        </CardContent>
+                        <CardActions>
+                          <Button
+                            size="small"
+                            variant="contained"
+                            startIcon={<PlayArrow />}
+                            onClick={() => navigate(`/quiz/${channel._id}`)}
+                          >
+                            Start Quiz
+                          </Button>
+                          <Button size="small" onClick={() => navigate(`/quiz/${channel._id}`)}>View Details</Button>
+                        </CardActions>
+                      </Card>
+                    );
+                  })()}
                 </Grid>
               ))}
             </Grid>
@@ -677,6 +748,7 @@ const Dashboard = () => {
       </Container>
       <Footer />
     </Box>
+     </>
   );
 };
 
