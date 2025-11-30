@@ -15,7 +15,7 @@ import {
 import { ArrowBack, Email, Phone, LocationOn } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import Footer from '../components/Footer';
-
+import contactService from '../services/contactService';
 const Contact = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -25,19 +25,30 @@ const Contact = () => {
     message: '',
   });
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
-      setFormData({ name: '', email: '', subject: '', message: '' });
-    }, 3000);
+    setLoading(true);
+    try {
+      const response = await contactService.submitContact(formData)
+      if(response?.success){
+        setSubmitted(false);
+        setFormData({ name: '', email: '', subject: '', message: '' });
+      }
+    } catch (error) {
+      console.error('Error submitting contact form:', error);
+    } finally
+    {
+      setLoading(false);
+    }
+   
   };
 
   return (
@@ -135,7 +146,7 @@ const Contact = () => {
                     background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
                   }}
                 >
-                  Send Message
+                 {loading ? 'Sending...' : 'Send Message'}
                 </Button>
               </Box>
             </Paper>
