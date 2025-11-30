@@ -18,8 +18,8 @@ const Feedback = () => {
   const loadFeedback = async () => {
     try {
       const data = await feedbackService.getFeedback();
-      const items = data?.feedback || data || [];
-      setList(Array.isArray(items) ? items : []);
+      const items = data?.data;
+      setList(Array.isArray(items.items) ? items.items : []);
     } catch (err) {
       console.error('Failed to load feedback', err);
     }
